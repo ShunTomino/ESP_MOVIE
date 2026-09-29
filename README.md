@@ -17,7 +17,7 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series.
 
 ## Hardware Support
 ### MCU
-- Currently tested on ESP32-S3 development board only. Support for other ESP32 series devices has not been verified yet.
+- Currently tested on ESP32-S3-WROOM-1 only. Support for other ESP32 series devices has not been verified yet.
  
 ### Display
 - Supports Intel 8080 (8-bit parallel) interface with DMA transfer. SPI interface is not supported.
