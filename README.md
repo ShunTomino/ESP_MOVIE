@@ -41,3 +41,7 @@ ESP_MOVIE uses the following third-party libraries.
 - [esp-libhelix-mp3](https://github.com/chmorgan/esp-libhelix-mp3.git) (chmorgan): Apache License 2.0
 - [esp_new_jpeg](https://github.com/espressif/esp-adf-libs/tree/master/esp_new_jpeg) (Espressif): Espressif MIT License
 - [font8x16](https://github.com/hubenchang0515/font8x16.git) (hubenchang0515): MIT License
+
+##
+![Example1](example1.gif)
+![Example2](example2.gif)
