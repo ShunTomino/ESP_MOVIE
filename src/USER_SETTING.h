@@ -61,7 +61,7 @@
 // Buffer for reading JPG file or MotionJPG Frame data from SD card.
 // if JPG_BLOCK_DEC_ENABLE == 1, JPG_BUF is automatically placed to PSRAM.
 #define JPG_BUF_SIZE 40000 // Min: JPG file size or MotionJPG Frame data size
-#define JPG_BUF_ENABLE_PSRAM 0 // if PSRAM is supported, you can set 0.
+#define JPG_BUF_ENABLE_PSRAM 0 // if PSRAM is supported, you can set 1.
 
 // LCD Back Light PWM Control Setting
 #define LEDC_PWM_CHANNEL LEDC_CHANNEL_0
@@ -79,4 +79,4 @@
 
 // Buffer for reading MP3 file from SD card
 #define MP3_BUF_SIZE 1500 // Default 1500 Byte
-#define MP3_BUF_ENABLE_PSRAM 0  // if PSRAM is supported, you can set 0.
+#define MP3_BUF_ENABLE_PSRAM 0  // if PSRAM is supported, you can set 1.
