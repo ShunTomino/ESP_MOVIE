@@ -63,10 +63,10 @@ void set_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 int8_t set_image_window(uint16_t image_width, uint16_t image_height, int16_t x0, int16_t y0);
 
 // Set the X/Y axis of the display
+// <xy_exchange> 0:Normal, 1:Exchange
 // <x_inverse> 0:Normal, 1:Inverse 
 // <y_inverse> 0:Normal, 1:Inverse
-// <xy_exchange> 0:Normal, 1:Exchange
-void set_axis(bool x_inverse, bool y_inverse, bool xy_exchange);
+void set_axis(bool xy_exchange, bool x_inverse, bool y_inverse);
 
 // Display Initialization
 esp_err_t init_display();

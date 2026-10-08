@@ -113,10 +113,10 @@ int8_t set_image_window(uint16_t image_width, uint16_t image_height, int16_t x0,
 
 
 // Set the X/Y axis of the display
+// <xy_exchange> 0:Normal, 1:Exchange
 // <x_inverse> 0:Normal, 1:Inverse 
 // <y_inverse> 0:Normal, 1:Inverse
-// <xy_exchange> 0:Normal, 1:Exchange
-void set_axis(bool x_inverse, bool y_inverse, bool xy_exchange)
+void set_axis(bool xy_exchange, bool x_inverse, bool y_inverse)
 {
     uint8_t madctl = 0; // MADCTL register value
 
@@ -254,7 +254,7 @@ esp_err_t init_display()
 
     send_command(0x29); // Display ON
 
-    set_axis(LCD_X_INVERSE, LCD_Y_INVERSE, LCD_XY_EXCHANGE);
+    set_axis(LCD_XY_EXCHANGE, LCD_X_INVERSE, LCD_Y_INVERSE);
     set_window(0, 0, LCD_WIDTH-1, LCD_HEIGHT-1);
 
     return ESP_OK;
