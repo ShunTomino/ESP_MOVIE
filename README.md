@@ -22,7 +22,11 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series.
 ### Display
 - Supports Intel 8080 (8-bit parallel) interface with DMA transfer. SPI interface is not supported.
 - Supports RGB565 color format.
-- Currently tested with the ILI9342 display controller only.
+- Currently tested with the following display controllers. 
+  - ILI9342
+  - ST7789P3
+
+  Other MIPI DCS-compatible display controllers may also work, but have not been tested.
  
 ### Audio
 - Supports I2S audio output.
