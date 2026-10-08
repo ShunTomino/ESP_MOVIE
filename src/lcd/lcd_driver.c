@@ -112,25 +112,70 @@ int8_t set_image_window(uint16_t image_width, uint16_t image_height, int16_t x0,
 }
 
 
-// Set Color LUT (RGB565->RGB666 Color depth convertion in LCD)
-void set_color_table(uint8_t red_volume, uint8_t green_volume, uint8_t blue_volume)
+// Set the X/Y axis of the display
+// <x_inverse> 0:Normal, 1:Inverse 
+// <y_inverse> 0:Normal, 1:Inverse
+// <xy_exchange> 0:Normal, 1:Exchange
+void set_axis(bool x_inverse, bool y_inverse, bool xy_exchange)
 {
-    uint8_t color_table[128]; // RED:32byte, GREEN:64byte, BLUE:32byte
-    uint16_t k = 0;
-    uint8_t  i, j;
+    uint8_t madctl = 0; // MADCTL register value
 
-    for(i=0; i<(32/red_volume); i++)for(j=0; j<red_volume; j++)color_table[k++]=i;
-    for(i=0; i<(32/green_volume); i++)for(j=0; j<(green_volume*2); j++)color_table[k++]=i;
-    for(i=0; i<(32/blue_volume); i++)for(j=0; j<blue_volume; j++)color_table[k++]=i;
+    madctl = (y_inverse << 7) | (x_inverse << 6) | (xy_exchange << 5) | ((bool)LCD_RGB_FORMAT << 3);
 
-    esp_lcd_panel_io_tx_param(i80_handle, 0x2D, color_table,    32); // Set RED table
-    esp_lcd_panel_io_tx_param(i80_handle,   -1, color_table+32, 32); // Set GREEN table 1
-    esp_lcd_panel_io_tx_param(i80_handle,   -1, color_table+64, 32); // Set GREEN table 2
-    esp_lcd_panel_io_tx_param(i80_handle,   -1, color_table+96, 32); // Set BLUE table
-
-    //send_command(0x2D);
-    //for(k=0; k<128; k++)send_data(color_table[k]);
+    send_command(0x36); send_data(madctl);
 }
+
+
+#if LCD_COLOR_TABLE_ENABLE
+// Set Color Volume Look Up Table (RGB565->RGB666 Color depth convertion in LCD)
+// <gamma_curve> 0:Gamma 4.0, 1:Gamma 3.0, 2:Gamma 2.0, 3:Gamma 1.0
+// <color_vol_max> Maximum color volume (0~63)
+// <color_vol_output_offset> Color volume offset (0~63)
+void set_color_table(uint8_t gamma_curve, uint8_t color_vol_max, uint8_t color_vol_offset)
+{
+    uint8_t red_table[32];   // R: 32byte
+    uint8_t green_table[64]; // G: 64byte
+    uint8_t blue_table[32];  // B: 32byte
+    uint64_t i, max;
+
+    max = (color_vol_max - color_vol_offset);
+
+    // 6-bit Color Table (RGB565->RGB666), 0~63
+    switch(gamma_curve){
+        case 0: // Gamma 4.0
+            for(i=1; i<32; i++)red_table[i]   = (i * i * i * i * max + 461760) / 923521 + color_vol_offset;
+            for(i=1; i<64; i++)green_table[i] = (i * i * i * i * max + 7876531) / 15752961 + color_vol_offset;
+            for(i=1; i<32; i++)blue_table[i]  = (i * i * i * i * max + 461760) / 923521 + color_vol_offset;
+            break;
+        case 1: // Gamma 3.0
+            for(i=1; i<32; i++)red_table[i]   = (i * i * i * max + 14895) / 29791 + color_vol_offset;
+            for(i=1; i<64; i++)green_table[i] = (i * i * i * max + 125000) / 250047 + color_vol_offset;
+            for(i=1; i<32; i++)blue_table[i]  = (i * i * i * max + 14895) / 29791 + color_vol_offset;
+            break;
+        case 2: // Gamma 2.0
+            for(i=1; i<32; i++)red_table[i]   = (i * i * max + 480) / 961 + color_vol_offset;
+            for(i=1; i<64; i++)green_table[i] = (i * i * max + 1984) / 3969 + color_vol_offset;
+            for(i=1; i<32; i++)blue_table[i]  = (i * i * max + 480) / 961 + color_vol_offset;
+            break;
+        default: // Gamma 1.0
+            for(i=1; i<32; i++)red_table[i]   = (i * max + 15) / 31 + color_vol_offset;
+            for(i=1; i<64; i++)green_table[i] = (i + color_vol_offset > max) ? max : (i + color_vol_offset);
+            for(i=1; i<32; i++)blue_table[i]  = (i * max + 15) / 31 + color_vol_offset;
+    }
+
+    // Black Table
+    red_table[0] = 0;
+    green_table[0] = 0;
+    blue_table[0] = 0;
+
+    esp_lcd_panel_io_tx_param(i80_handle, 0x2D, red_table, 32); // Set RED table
+    esp_lcd_panel_io_tx_param(i80_handle,   -1, green_table, 32); // Set GREEN table 1
+    esp_lcd_panel_io_tx_param(i80_handle,   -1, green_table+32, 32); // Set GREEN table 2
+    esp_lcd_panel_io_tx_param(i80_handle,   -1, blue_table, 32); // Set BLUE table
+
+    vTaskDelay(10 / portTICK_PERIOD_MS); // Wait for LCD ready
+}
+#endif
 
 
 esp_err_t init_display()
@@ -141,9 +186,9 @@ esp_err_t init_display()
     // Reset Display
     gpio_reset_pin(PIN_LCD_RST);
     gpio_set_direction(PIN_LCD_RST, GPIO_MODE_OUTPUT);
-    gpio_set_level(PIN_LCD_RST, 0);  // LED OFF
+    gpio_set_level(PIN_LCD_RST, 0); // LED OFF
     vTaskDelay(10 / portTICK_PERIOD_MS);
-    gpio_set_level(PIN_LCD_RST, 1);  // LED ON
+    gpio_set_level(PIN_LCD_RST, 1); // LED ON
     vTaskDelay(120 / portTICK_PERIOD_MS);
 
     // 8bit Parallel Bus Initialization
@@ -152,35 +197,24 @@ esp_err_t init_display()
 
     // Send initialization commands
     send_command(0x28); // Display OFF
+    
     send_command(0xCF); send_data(0x00); send_data(0x83); send_data(0x30);
     send_command(0xED); send_data(0x64); send_data(0x03); send_data(0x12); send_data(0x81);
     send_command(0xE8); send_data(0x85); send_data(0x01); send_data(0x79);
     send_command(0xCB); send_data(0x39); send_data(0x2C); send_data(0x00); send_data(0x34); send_data(0x02);
     send_command(0xF7); send_data(0x20);
     send_command(0xEA); send_data(0x00); send_data(0x00);
-
+    
+    /*
     // Power control settings
-    send_command(0xC0); send_data(0x26); // Power Control 1
-    send_command(0xC1); send_data(0x11); // Power Control 2
-    send_command(0xC5); send_data(0x35); send_data(0x3E);
-    send_command(0xC7); send_data(0xBE);
+    send_command(0xC0); send_data(0x03); send_data(0x00); // Power Control 1
+    send_command(0xC1); send_data(0x70); // Power Control 2
+    send_command(0xC2); send_data(0x44); // Power Control 3
+    send_command(0xC5); send_data(0x00); send_data(0x14);
+    send_command(0xC7); send_data(0xFF);
+    */
 
-    // VCOM settings (Different for each display)
-    #if LCD_INVERSE
-        #if LCD_COLOR_INVERSE
-            send_command(0x36); send_data(0x00); // 反転座標(右下が原点), RGB:0x08, BGR:0x00
-        #else
-            send_command(0x36); send_data(0x08); // 反転座標(右下が原点), RGB:0x08, BGR:0x00
-        #endif
-    #else
-        #if LCD_COLOR_INVERSE
-            send_command(0x36); send_data(0xC0); // 通常座標(左上が原点), RGB:0xC8, BGR:0xC0
-        #else
-            send_command(0x36); send_data(0xC8); // 通常座標(左上が原点), RGB:0xC8, BGR:0xC0
-        #endif
-    #endif
-
-    send_command(0x3A); send_data(0x55); // Pixel Format (16-bit)
+    send_command(0x3A); send_data(0x55); // Pixel data size (16-bit)
 
     // Frame rate control
     send_command(0xB1); send_data(0x00); send_data(0x1B);
@@ -189,7 +223,11 @@ esp_err_t init_display()
     send_command(0xB6); send_data(0x0A); send_data(0x82); send_data(0x27); send_data(0x00);
 
     // Color Inverse
-    send_command(0x20); // OFF:0x20, ON:0x21
+    #if LCD_DATA_INVERSE
+        send_command(0x21); // Inverse ON:0x21
+    #else
+        send_command(0x20); // Inverse OFF:0x20
+    #endif
 
     // Gumma set
     send_command(0x26); send_data(0x04);
@@ -202,17 +240,21 @@ esp_err_t init_display()
     for(i=0; i<15; i++)send_data(gamma_neg[i]);
     */
 
-    // Color LUT (RGB565->RGB666 Color depth convertion in LCD)
-    set_color_table(COLOR_VOLUME_3, COLOR_VOLUME_3, COLOR_VOLUME_3);
-
+    #if LCD_COLOR_TABLE_ENABLE
+        set_color_table(GAMMA_CURVE, COLOR_VOL_MAX, COLOR_VOL_OFFSET);
+    #endif
 
     // ----------Enable display----------
     send_command(0x11); // Sleep OUT
     vTaskDelay(120 / portTICK_PERIOD_MS);
+
+    send_command(0x38); // Idle Mode OFF
+    send_command(0x13); // Normal Display Mode ON
+    send_command(0x35); // Tearing Effect Line OFF
+
     send_command(0x29); // Display ON
 
-
-    // 画面上の描画範囲を設定
+    set_axis(LCD_X_INVERSE, LCD_Y_INVERSE, LCD_XY_EXCHANGE);
     set_window(0, 0, LCD_WIDTH-1, LCD_HEIGHT-1);
 
     return ESP_OK;

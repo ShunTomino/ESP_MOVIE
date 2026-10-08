@@ -24,9 +24,6 @@ extern "C" {
 #endif
 
 
-#define PIXEL_TX_CMD 0x2C // LCD Memory Write Command
-
-
 // RGB565 Color
 #define RGB565_BLACK 0x0000
 #define RGB565_WHITE 0xFFFF
@@ -37,13 +34,17 @@ extern "C" {
 #define RGB565_MAGENTA 0xF81F
 #define RGB565_CYAN    0x07FF
 
-// Color MAX Depth Volume
-#define COLOR_VOLUME_0 32
-#define COLOR_VOLUME_1 16
-#define COLOR_VOLUME_2  8
-#define COLOR_VOLUME_3  4 // Defaulut
-#define COLOR_VOLUME_4  2
-#define COLOR_VOLUME_5  1
+#define LCD_COLOR_TABLE_ENABLE 1
+
+#if LCD_COLOR_TABLE_ENABLE
+    // Color adjustment for color table
+    #define GAMMA_CURVE 1 // 0:Gamma 4.0, 1:Gamma 3.0, 2:Gamma 2.0, 3:Gamma 1.0
+    #define COLOR_VOL_MAX 55 // Maximum color volume (Max:63)
+    #define COLOR_VOL_OFFSET 0 // Color volume offset (0~63)
+#endif
+
+
+#define PIXEL_TX_CMD 0x2C // LCD Memory Write Command
 
 
 // LCD Back Light PWM Initialization
@@ -60,6 +61,12 @@ void set_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 // x0, y0 are offset value, but you set the value to negative, the image is centered.
 // <return> 0:OK, -1:Over Width Error, -2:Over Height Error
 int8_t set_image_window(uint16_t image_width, uint16_t image_height, int16_t x0, int16_t y0);
+
+// Set the X/Y axis of the display
+// <x_inverse> 0:Normal, 1:Inverse 
+// <y_inverse> 0:Normal, 1:Inverse
+// <xy_exchange> 0:Normal, 1:Exchange
+void set_axis(bool x_inverse, bool y_inverse, bool xy_exchange);
 
 // Display Initialization
 esp_err_t init_display();

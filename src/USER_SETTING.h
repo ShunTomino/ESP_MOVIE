@@ -25,7 +25,7 @@
 
 
 /*---------- Display Setting ----------*/
-// Intel 8080 Bus(8 Bit Parallel Bus) Pin Assign
+// Intel8080 Bus(8 Bit Parallel Bus) Pin Assign
 #define PIN_LCD_D0 GPIO_NUM_16
 #define PIN_LCD_D1 GPIO_NUM_17
 #define PIN_LCD_D2 GPIO_NUM_18
@@ -37,20 +37,24 @@
 #define PIN_LCD_DC GPIO_NUM_15
 #define PIN_LCD_WR GPIO_NUM_7
 #define PIN_LCD_RD GPIO_NUM_6
-#define PIN_LCD_CS GPIO_NUM_NC // No Need
+#define PIN_LCD_CS GPIO_NUM_NC // Chip Select Pin, if you don't use this pin, set GPIO_NUM_NC.
 
 #define PIN_LCD_RST GPIO_NUM_5 // Reset Pin
 #define PIN_LCD_BL  GPIO_NUM_4 // BackLight Pin
 
-// Intel 8080 Bus Clock
+// Intel8080 Bus Clock
 #define LCD_CLK_FREQ 20000000 // Max:20000000Hz
 
 // LCD Pixcel Width/Height 
 #define LCD_WIDTH  320
 #define LCD_HEIGHT 240
 
-#define LCD_INVERSE 0
-#define LCD_COLOR_INVERSE 0
+#define LCD_XY_EXCHANGE 1 // 0:Normal, 1:Exchange
+#define LCD_X_INVERSE 1 // 0:Normal, 1:Inverse
+#define LCD_Y_INVERSE 0 // 0:Normal, 1:Inverse
+
+#define LCD_RGB_FORMAT 0 // 0:RGB, 1:BGR
+#define LCD_DATA_INVERSE 1 // 0:Normal, 1:Inverse
 
 
 /*---------- JPG/MJPG Setting ----------*/
@@ -61,7 +65,7 @@
 // Buffer for reading JPG file or MotionJPG Frame data from SD card.
 // if JPG_BLOCK_DEC_ENABLE == 1, JPG_BUF is automatically placed to PSRAM.
 #define JPG_BUF_SIZE 40000 // Min: JPG file size or MotionJPG Frame data size
-#define JPG_BUF_ENABLE_PSRAM 0 // if PSRAM is supported, you can set 1.
+#define JPG_BUF_ENABLE_PSRAM 0 // if PSRAM is supported, you can set 0.
 
 // LCD Back Light PWM Control Setting
 #define LEDC_PWM_CHANNEL LEDC_CHANNEL_0
@@ -79,4 +83,4 @@
 
 // Buffer for reading MP3 file from SD card
 #define MP3_BUF_SIZE 1500 // Default 1500 Byte
-#define MP3_BUF_ENABLE_PSRAM 0  // if PSRAM is supported, you can set 1.
+#define MP3_BUF_ENABLE_PSRAM 0  // if PSRAM is supported, you can set 0.
