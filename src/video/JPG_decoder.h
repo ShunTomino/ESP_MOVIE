@@ -63,6 +63,7 @@ typedef struct {
     #if JPG_BLOCK_DEC_ENABLE
         int block_size;
         int block_count;
+        int remain_size;
     #else
         size_t output_size;
     #endif
