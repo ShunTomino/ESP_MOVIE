@@ -78,6 +78,7 @@ jpg_err_t display_jpg(char *path_jpg, int16_t x0, int16_t y0, jpeg_dec_header_in
         uint16_t *img_buf;
         int block_size = 0;
         int block_count = 0;
+        int remain_size = 0;
         uint16_t i;
     #endif
 
@@ -95,19 +96,13 @@ jpg_err_t display_jpg(char *path_jpg, int16_t x0, int16_t y0, jpeg_dec_header_in
     // Set input/output buffer and input buffer length
     jpg_io.inbuf = jpg_buf;
     jpg_io.inbuf_len = JPG_BUF_SIZE;
+    
+    #if JPG_BLOCK_DEC_ENABLE
+        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
+    #endif
 
     // Parse jpeg picture header and get picture for user and decoder
     err = jpeg_dec_parse_header(jpg_dec, &jpg_io, jpg_info);
-
-    // Check image resolution
-    #if JPG_BLOCK_DEC_ENABLE
-        if(jpg_info->width % 16 || jpg_info->height % 16){
-            printf("Image width and height should be times of 16.");
-            printf("(%d, %d)\n", jpg_info->width, jpg_info->height);
-            return JPG_ERR_RESOLUTION_UNMATCH;
-        }
-    #endif
-
     if (err) return (jpg_err_t)err;
 
     // Set image size
@@ -116,32 +111,37 @@ jpg_err_t display_jpg(char *path_jpg, int16_t x0, int16_t y0, jpeg_dec_header_in
 
 
     #if JPG_BLOCK_DEC_ENABLE
-        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
-
         err = jpeg_dec_get_outbuf_len(jpg_dec, &block_size);
         if (err) return (jpg_err_t)err;
 
         err = jpeg_dec_get_process_count(jpg_dec, &block_count); // Get process count
         if (err) return (jpg_err_t)err;
 
+        remain_size = (jpg_info->width * jpg_info->height * 2) % block_size;
+        if (remain_size == 0) remain_size = block_size;
+
         set_double_image_buffer(&img_buf, &double_img_buf_busy);
         jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
-
         while(*double_img_buf_busy); // Wait for buffer to finish sending
         *double_img_buf_busy = true;
         err = jpeg_dec_process(jpg_dec, &jpg_io);
         if(err) return (jpg_err_t)err;
         esp_lcd_panel_io_tx_color(i80_handle, PIXEL_TX_CMD, img_buf, block_size); // Initial sending
         
-        for (i = 1; i < block_count; i++) {
+        for (i = 2; i < block_count; i++) {
             set_double_image_buffer(&img_buf, &double_img_buf_busy);
             jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
-
             while(*double_img_buf_busy); // Wait for buffer to finish sending
             *double_img_buf_busy = true;
             jpeg_dec_process(jpg_dec, &jpg_io);
             esp_lcd_panel_io_tx_color(i80_handle, -1, img_buf, block_size);
         }
+        set_double_image_buffer(&img_buf, &double_img_buf_busy);
+        jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
+        while(*double_img_buf_busy); // Wait for buffer to finish sending
+        *double_img_buf_busy = true;
+        jpeg_dec_process(jpg_dec, &jpg_io);
+        esp_lcd_panel_io_tx_color(i80_handle, -1, img_buf, remain_size);
     #else
         jpg_io.outbuf = (uint8_t *)imgBuf; // Set output buffer
         while(imgBuf_busy);
@@ -431,21 +431,25 @@ void task_mjpg_decode(void *video_info)
         #if JPG_BLOCK_DEC_ENABLE
             set_double_image_buffer(&img_buf, &double_img_buf_busy);
             jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
-
             while(*double_img_buf_busy); // Wait for buffer to finish sending
             *double_img_buf_busy = true;
             jpeg_dec_process(jpg_dec, &jpg_io);
             esp_lcd_panel_io_tx_color(i80_handle, PIXEL_TX_CMD, img_buf, video.block_size);
 
-            for (i = 1; i < video.block_count; i++) {
+            for (i = 2; i < video.block_count; i++) {
                 set_double_image_buffer(&img_buf, &double_img_buf_busy);
                 jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
-
                 while(*double_img_buf_busy); // Wait for buffer to finish sending
                 *double_img_buf_busy = true;
                 jpeg_dec_process(jpg_dec, &jpg_io);
                 esp_lcd_panel_io_tx_color(i80_handle, -1, img_buf, video.block_size);
             }
+            set_double_image_buffer(&img_buf, &double_img_buf_busy);
+            jpg_io.outbuf = (uint8_t *)img_buf; // Set output buffer
+            while(*double_img_buf_busy); // Wait for buffer to finish sending
+            *double_img_buf_busy = true;
+            jpeg_dec_process(jpg_dec, &jpg_io);
+            esp_lcd_panel_io_tx_color(i80_handle, -1, img_buf, video.remain_size);
         #else
             while(imgBuf_busy);
             imgBuf_busy = true;
@@ -500,6 +504,10 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
     jpg_io.inbuf = jpg_buf;
     jpg_io.inbuf_len = JPG_BUF_SIZE; // set input buffer length
 
+    #if JPG_BLOCK_DEC_ENABLE
+        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
+    #endif
+
     // Make mjpgload file path
 	get_path_mjpgload(path_mjpgload, path_mjpg);
     //printf("\nMJPGLOAD: %s\n", path_mjpgload);
@@ -552,17 +560,6 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
 
     // Parse MJPG picture header and get picture for user and decoder
     err = (jpg_err_t)jpeg_dec_parse_header(jpg_dec, &jpg_io, &jpg_info);
-    
-    // Check image resolution
-    #if JPG_BLOCK_DEC_ENABLE
-        if(jpg_info.width % 16 || jpg_info.height % 16){
-            printf("Image width and height must be times of 16.");
-            printf("(%d, %d)\n", jpg_info.width, jpg_info.height);
-            err = JPG_ERR_RESOLUTION_UNMATCH;
-            goto END;
-        }
-    #endif
-    
     if(err) goto END;
 
     // Set window size for image
@@ -574,8 +571,6 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
 
     // JPG test decode 
     #if JPG_BLOCK_DEC_ENABLE
-        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
-
         err = (jpg_err_t)jpeg_dec_get_outbuf_len(jpg_dec, &video.block_size);
         if(err) goto END;
         printf("Image block size: %d\n", video.block_size);
@@ -583,6 +578,9 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
         err = (jpg_err_t)jpeg_dec_get_process_count(jpg_dec, &video.block_count); // Get process count
         if(err) goto END;
         printf("Image block count for 1 frame: %d\n", video.block_count);
+
+        video.remain_size = (jpg_info.width * jpg_info.height * 2) % video.block_size;
+        if (video.remain_size == 0) video.remain_size = video.block_size;
 
         jpg_io.outbuf = (uint8_t *)imgBuf[0]; // Set output buffer
         err = (jpg_err_t)jpeg_dec_process(jpg_dec, &jpg_io); // 1 block test decode 
