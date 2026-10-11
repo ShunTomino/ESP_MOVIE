@@ -21,7 +21,7 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series.
  
 ### Display
 - Supports Intel 8080 (8-bit parallel) interface with DMA transfer. SPI interface is not supported.
-- Supports RGB565 color format.
+- Supports RGB565/BGR565 color format.
 - Currently tested with the following display controllers. 
   - ILI9342
   - ST7789P3
