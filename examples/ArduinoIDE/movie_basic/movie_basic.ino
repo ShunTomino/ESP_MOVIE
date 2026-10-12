@@ -19,7 +19,7 @@ void setup()
   set_dir_for_loadfiles(PATH_SD); // Set directory for generated files
 
   set_audio_volume(5); // Set 0~20
-  backlight_volume(170); // Set 0~255
+  set_backlight_volume(170); // Set 0~255
 }
 
 void loop()

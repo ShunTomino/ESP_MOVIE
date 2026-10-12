@@ -17,7 +17,7 @@ void setup()
   init_jpg_decoder(NULL); // MJPG(Motion JPEG) Decoder Initialzation
   set_dir_for_loadfiles(PATH_SD); // Set directory for generated files
 
-  backlight_volume(170); // Set 0~255
+  set_backlight_volume(170); // Set 0~255
 }
 
 void loop()

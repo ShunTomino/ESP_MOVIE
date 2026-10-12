@@ -15,7 +15,7 @@ void setup()
   init_backlight(); // Display Back Light Initialzation
   init_jpg_decoder(NULL); // JPEG Decoder Initialzation
 
-  backlight_volume(170); // Set 0~255
+  set_backlight_volume(170); // Set 0~255
 }
 
 void loop()
