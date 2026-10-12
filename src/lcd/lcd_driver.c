@@ -19,7 +19,7 @@ esp_err_t init_backlight()
     ledc_timer_config_t ledc_cfg = {
         .speed_mode       = LEDC_LOW_SPEED_MODE,
         .duty_resolution  = LEDC_TIMER_8_BIT, // 0〜255
-        .timer_num        = LEDC_PWM_TIMER_NUM,
+        .timer_num        = (ledc_timer_t)LEDC_PWM_TIMER_NUM, // LEDC_TIMER_0 ~ 3
         .freq_hz          = 20000,
         .clk_cfg          = LEDC_AUTO_CLK,
     };
@@ -27,7 +27,7 @@ esp_err_t init_backlight()
     ledc_channel_config_t ledc_ch_chg = {
         .gpio_num   = PIN_LCD_BL,
         .speed_mode = LEDC_LOW_SPEED_MODE,
-        .channel    = LEDC_PWM_CHANNEL,
+        .channel    = (ledc_channel_t)LEDC_PWM_CHANNEL, // LEDC_CHANNEL_0 ~ 7
         .intr_type  = LEDC_INTR_DISABLE,
         .timer_sel  = LEDC_PWM_TIMER_NUM,
         .duty       = 0,
@@ -184,11 +184,11 @@ esp_err_t init_display()
     //uint16_t i,j;
 
     // Reset Display
-    gpio_reset_pin(PIN_LCD_RST);
-    gpio_set_direction(PIN_LCD_RST, GPIO_MODE_OUTPUT);
-    gpio_set_level(PIN_LCD_RST, 0); // LED OFF
+    gpio_reset_pin((gpio_num_t)PIN_LCD_RST);
+    gpio_set_direction((gpio_num_t)PIN_LCD_RST, GPIO_MODE_OUTPUT);
+    gpio_set_level((gpio_num_t)PIN_LCD_RST, 0); // LED OFF
     vTaskDelay(10 / portTICK_PERIOD_MS);
-    gpio_set_level(PIN_LCD_RST, 1); // LED ON
+    gpio_set_level((gpio_num_t)PIN_LCD_RST, 1); // LED ON
     vTaskDelay(120 / portTICK_PERIOD_MS);
 
     // 8bit Parallel Bus Initialization

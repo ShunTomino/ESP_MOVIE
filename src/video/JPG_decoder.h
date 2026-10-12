@@ -14,11 +14,11 @@
 #include <esp_timer.h>
 
 #ifdef ARDUINO // Arduino IDE
-    #include "sdcard/sd_spi.h"
+    #include "sdcard/sdcard.h"
     #include "lcd/lcd_driver.h"
 	#include "esp_new_jpeg/src/esp_jpeg_dec.h"
 #else // ESP_PLATFORM(ESP-IDF)
-    #include "sd_spi.h"
+    #include "sdcard.h"
     #include "lcd_driver.h"
 	#include "esp_jpeg_dec.h"
 #endif

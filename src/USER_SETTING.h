@@ -9,14 +9,14 @@
 
 /*---------- SD CARD Setting ----------*/
 // SPI Pin Assign
-#define PIN_SD_SPI_MOSI GPIO_NUM_21
-#define PIN_SD_SPI_MISO GPIO_NUM_13
-#define PIN_SD_SPI_SCK  GPIO_NUM_14
-#define PIN_SD_SPI_CS   GPIO_NUM_NC
+#define PIN_SD_SPI_MOSI 21
+#define PIN_SD_SPI_MISO 13
+#define PIN_SD_SPI_SCK  14
+#define PIN_SD_SPI_CS   -1 // Chip Select Pin, if you don't use this pin, -1.
 
 // SPI Setting
-#define SD_SPI_FREQ_kHz 20000 // Max:2000kHz
-#define SD_SPI_HOST SPI2_HOST
+#define SD_SPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
+#define SD_SPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
 
 // File setting
 #define SD_MAX_FILES 3 // Min:3
@@ -26,21 +26,21 @@
 
 /*---------- Display Setting ----------*/
 // Intel8080 Bus(8 Bit Parallel Bus) Pin Assign
-#define PIN_LCD_D0 GPIO_NUM_16
-#define PIN_LCD_D1 GPIO_NUM_17
-#define PIN_LCD_D2 GPIO_NUM_18
-#define PIN_LCD_D3 GPIO_NUM_8
-#define PIN_LCD_D4 GPIO_NUM_9
-#define PIN_LCD_D5 GPIO_NUM_10
-#define PIN_LCD_D6 GPIO_NUM_11
-#define PIN_LCD_D7 GPIO_NUM_12
-#define PIN_LCD_DC GPIO_NUM_15
-#define PIN_LCD_WR GPIO_NUM_7
-#define PIN_LCD_RD GPIO_NUM_6
-#define PIN_LCD_CS GPIO_NUM_NC // Chip Select Pin, if you don't use this pin, set GPIO_NUM_NC.
+#define PIN_LCD_D0 16
+#define PIN_LCD_D1 17
+#define PIN_LCD_D2 18
+#define PIN_LCD_D3 8
+#define PIN_LCD_D4 9
+#define PIN_LCD_D5 10
+#define PIN_LCD_D6 11
+#define PIN_LCD_D7 12
+#define PIN_LCD_DC 15
+#define PIN_LCD_WR 7
+#define PIN_LCD_RD 6
+#define PIN_LCD_CS -1 // Chip Select Pin, if you don't use this pin, set -1.
 
-#define PIN_LCD_RST GPIO_NUM_5 // Reset Pin
-#define PIN_LCD_BL  GPIO_NUM_4 // BackLight Pin
+#define PIN_LCD_RST 5 // Reset Pin
+#define PIN_LCD_BL  4 // BackLight Pin
 
 // Intel8080 Bus Clock
 #define LCD_CLK_FREQ 20000000 // Max:20000000Hz
@@ -49,13 +49,23 @@
 #define LCD_WIDTH  320
 #define LCD_HEIGHT 240
 
-#define LCD_XY_EXCHANGE 1 // 0:Normal, 1:Exchange
+#define LCD_XY_EXCHANGE 0 // 0:Normal, 1:Exchange
 #define LCD_X_INVERSE 1 // 0:Normal, 1:Inverse
-#define LCD_Y_INVERSE 0 // 0:Normal, 1:Inverse
+#define LCD_Y_INVERSE 1 // 0:Normal, 1:Inverse
 
-#define LCD_RGB_FORMAT 0 // 0:RGB, 1:BGR
-#define LCD_DATA_INVERSE 1 // 0:Normal, 1:Inverse
+#define LCD_RGB_FORMAT 1 // 0:RGB, 1:BGR
+#define LCD_DATA_INVERSE 0 // 0:Normal, 1:Inverse
 
+// Enable RGB565->RGB666 Color depth convertion in LCD
+// If your LCD supports color depth conversion table, you can set 1.
+#define LCD_COLOR_TABLE_ENABLE 1
+
+#if LCD_COLOR_TABLE_ENABLE
+    // Color adjustment for color table
+    #define GAMMA_CURVE 1 // 0:Gamma 4.0, 1:Gamma 3.0, 2:Gamma 2.0, 3:Gamma 1.0
+    #define COLOR_VOL_MAX 55 // Maximum color volume (Max:63)
+    #define COLOR_VOL_OFFSET 0 // Color volume offset (0~63)
+#endif
 
 /*---------- JPG/MJPG Setting ----------*/
 // Block Decode Mode(Minimal RAM use), if PSRAM is supported, you can set 0.
@@ -68,16 +78,16 @@
 #define JPG_BUF_ENABLE_PSRAM 0 // if PSRAM is supported, you can set 0.
 
 // LCD Back Light PWM Control Setting
-#define LEDC_PWM_CHANNEL LEDC_CHANNEL_0
-#define LEDC_PWM_TIMER_NUM LEDC_TIMER_0
+#define LEDC_PWM_CHANNEL 0 // Ledc Channel 0 ~ 7
+#define LEDC_PWM_TIMER_NUM 0 // Ledc Timer 0 ~ 3
 
 
 /*---------- MP3 Setting ----------*/
 // I2S DAC Pin Assign
-#define PIN_I2S_BCLK   GPIO_NUM_37 // to BCK
-#define PIN_I2S_DOUT   GPIO_NUM_36 // to DIN
-#define PIN_I2S_LRC    GPIO_NUM_35 // to LRCK(WS)
-#define PIN_AUDIO_MUTE GPIO_NUM_48 // High:unmute, Low:mute, if you don't use this pin, set GPIO_NUM_NC.
+#define PIN_I2S_BCLK   37 // to BCK
+#define PIN_I2S_DOUT   36 // to DIN
+#define PIN_I2S_LRC    35 // to LRCK(WS)
+#define PIN_AUDIO_MUTE 48 // High:unmute, Low:mute, if you don't use this pin, set -1.
 
 #define I2S_PORT_NUM I2S_NUM_0
 

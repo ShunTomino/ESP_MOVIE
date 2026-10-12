@@ -101,18 +101,18 @@ esp_err_t init_i80()
     esp_err_t err;
 
     esp_lcd_i80_bus_config_t i80_bus_cfg = {
-        .dc_gpio_num = PIN_LCD_DC,
-        .wr_gpio_num = PIN_LCD_WR,
+        .dc_gpio_num = (gpio_num_t)PIN_LCD_DC,
+        .wr_gpio_num = (gpio_num_t)PIN_LCD_WR,
         .clk_src = LCD_CLK_SRC_PLL160M,
         .data_gpio_nums = {
-            PIN_LCD_D0,
-            PIN_LCD_D1,
-            PIN_LCD_D2,
-            PIN_LCD_D3,
-            PIN_LCD_D4,
-            PIN_LCD_D5,
-            PIN_LCD_D6,
-            PIN_LCD_D7,
+            (gpio_num_t)PIN_LCD_D0,
+            (gpio_num_t)PIN_LCD_D1,
+            (gpio_num_t)PIN_LCD_D2,
+            (gpio_num_t)PIN_LCD_D3,
+            (gpio_num_t)PIN_LCD_D4,
+            (gpio_num_t)PIN_LCD_D5,
+            (gpio_num_t)PIN_LCD_D6,
+            (gpio_num_t)PIN_LCD_D7,
         },
         .bus_width = 8, // pararel 8bit
 
@@ -126,7 +126,7 @@ esp_err_t init_i80()
     };
 
     esp_lcd_panel_io_i80_config_t i80_io_cfg = {
-        .cs_gpio_num = PIN_LCD_CS,
+        .cs_gpio_num = (gpio_num_t)PIN_LCD_CS,
         .pclk_hz = LCD_CLK_FREQ,
         .trans_queue_depth = IMGBUF_COUNT,
         .on_color_trans_done = lcd_dma_send_done,
@@ -153,16 +153,16 @@ esp_err_t init_i80()
     
 
     // Reset Pin Setting
-    gpio_reset_pin(PIN_LCD_D0);
-    gpio_reset_pin(PIN_LCD_D1);
-    gpio_reset_pin(PIN_LCD_D2);
-    gpio_reset_pin(PIN_LCD_D3);
-    gpio_reset_pin(PIN_LCD_D4);
-    gpio_reset_pin(PIN_LCD_D5);
-    gpio_reset_pin(PIN_LCD_D6);
-    gpio_reset_pin(PIN_LCD_D7);
-    gpio_reset_pin(PIN_LCD_WR);
-    gpio_reset_pin(PIN_LCD_DC);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D0);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D1);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D2);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D3);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D4);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D5);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D6);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_D7);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_WR);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_DC);
 
     err = esp_lcd_new_i80_bus(&i80_bus_cfg, &i80_bus);
     if (err) return err;
@@ -171,9 +171,9 @@ esp_err_t init_i80()
     if (err) return err;
 
     // RD Pin Setting (But currently, READ MODE is not supported.)
-    gpio_reset_pin(PIN_LCD_RD);
-    gpio_set_direction(PIN_LCD_RD, GPIO_MODE_OUTPUT);
-    gpio_set_level(PIN_LCD_RD, 1);
+    gpio_reset_pin((gpio_num_t)PIN_LCD_RD);
+    gpio_set_direction((gpio_num_t)PIN_LCD_RD, GPIO_MODE_OUTPUT);
+    gpio_set_level((gpio_num_t)PIN_LCD_RD, 1);
 
     send_data(0x00); // Dummy data for first sending
 

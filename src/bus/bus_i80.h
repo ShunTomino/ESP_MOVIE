@@ -18,8 +18,8 @@ extern "C" {
 #endif
 
 
-#define MAX_DMA_TRANSFER_SIZE (4095*25) // ESP-IDF v6.1
-//#define MAX_DMA_TRANSFER_SIZE (4095*26) // ESP-IDF v5.5.5
+#define MAX_DMA_TRANSFER_SIZE (4095 * 25) // ESP-IDF v6.1
+//#define MAX_DMA_TRANSFER_SIZE (4095 * 26) // ESP-IDF v5.5.5
 
 #if JPG_BLOCK_DEC_ENABLE
     #define IMGBUF_COUNT 2 // Double buffer

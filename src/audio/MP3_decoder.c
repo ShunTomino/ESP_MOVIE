@@ -54,9 +54,9 @@ esp_err_t init_i2s_dac()
 		.slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_STEREO),
 		.gpio_cfg = {
 			.mclk = I2S_GPIO_UNUSED,
-			.bclk = PIN_I2S_BCLK,
-			.ws = PIN_I2S_LRC,
-			.dout = PIN_I2S_DOUT,
+			.bclk = (gpio_num_t)PIN_I2S_BCLK,
+			.ws = (gpio_num_t)PIN_I2S_LRC,
+			.dout = (gpio_num_t)PIN_I2S_DOUT,
 			.din = I2S_GPIO_UNUSED,
 			.invert_flags = {
 				.mclk_inv = false,
@@ -170,17 +170,6 @@ void audio_silence()
 }
 
 
-#if (PIN_AUDIO_MUTE != -1)
-	void audio_mute(){
-		gpio_set_level(PIN_AUDIO_MUTE, 0);
-	}
-
-	void audio_unmute(){
-		gpio_set_level(PIN_AUDIO_MUTE, 1);
-	}
-#endif
-
-
 void init_mp3_decoder(FuncEndMP3 func_end)
 {
 	//audio_silence();
@@ -188,11 +177,11 @@ void init_mp3_decoder(FuncEndMP3 func_end)
 
 	mp3Dec = MP3InitDecoder();
 
-	#if (PIN_AUDIO_MUTE != -1)
+	#if (PIN_AUDIO_MUTE >= 0)
 		// Audio Mute Pin Setting
-		gpio_reset_pin(PIN_AUDIO_MUTE);
-		gpio_set_direction(PIN_AUDIO_MUTE, GPIO_MODE_OUTPUT);
-		audio_unmute();
+		gpio_reset_pin((gpio_num_t)PIN_AUDIO_MUTE);
+		gpio_set_direction((gpio_num_t)PIN_AUDIO_MUTE, GPIO_MODE_OUTPUT);
+		SET_AUDIO_UNMUTE();
 	#endif
 
 	// CallBack Registration
@@ -300,6 +289,10 @@ void task_mp3_decode(void *audio_info)
 	START:
 	xSemaphoreTake(mp3_dec_start, portMAX_DELAY); // Wait for MP3 decode start
 
+	#if (PIN_AUDIO_MUTE >= 0)
+		SET_AUDIO_UNMUTE();
+	#endif
+
 	// Normal Loop
 	while (1) {
 		// Ring buffer read
@@ -334,6 +327,10 @@ void task_mp3_decode(void *audio_info)
 	}
 
 	END:
+		#if (PIN_AUDIO_MUTE >= 0)
+			SET_AUDIO_MUTE();
+		#endif
+
 		audio_silence(); // Audio mute
 		if (mp3Pause) goto START; // Pause
 

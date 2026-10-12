@@ -14,12 +14,13 @@
 #include <driver/i2s_std.h>
 #include <driver/i2s_pdm.h>
 #include <driver/gpio.h>
+#include <soc/gpio_struct.h>
 
 #ifdef ARDUINO // Arduino IDE
-	#include "sdcard/sd_spi.h"
+	#include "sdcard/sdcard.h"
 	#include "esp-libhelix-mp3/mp3dec.h"
 #else // ESP_PLATFORM(ESP-IDF)
-	#include "sd_spi.h"
+	#include "sdcard.h"
 	#include "mp3dec.h"
 #endif
 
@@ -32,9 +33,21 @@ extern "C" {
 
 #define MAX_VOLUME 20
 
-#if MP3_BUF_SIZE < 1445
+#if (MP3_BUF_SIZE < 1445)
 	#define MP3_BUF_SIZE 1445
 #endif
+
+
+#if (PIN_AUDIO_MUTE >= 0)
+	#if (PIN_AUDIO_MUTE < 32)
+		#define SET_AUDIO_MUTE()   GPIO.out_w1tc = (1U << PIN_AUDIO_MUTE)
+		#define SET_AUDIO_UNMUTE() GPIO.out_w1ts = (1U << PIN_AUDIO_MUTE)
+	#else
+		#define SET_AUDIO_MUTE()   GPIO.out1_w1tc.val = (1U << (PIN_AUDIO_MUTE - 32))
+		#define SET_AUDIO_UNMUTE() GPIO.out1_w1ts.val = (1U << (PIN_AUDIO_MUTE - 32))
+	#endif
+#endif
+
 
 typedef enum {
 	MP3_OK = ERR_MP3_NONE,
@@ -94,12 +107,6 @@ void set_audio_volume(int16_t volume);
 
 
 void audio_silence();
-
-
-#if (PIN_AUDIO_MUTE != -1)
-	void audio_mute();
-	void audio_unmute();
-#endif
 
 
 void init_mp3_decoder(FuncEndMP3 func_end);

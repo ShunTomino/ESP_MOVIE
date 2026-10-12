@@ -34,15 +34,6 @@ extern "C" {
 #define RGB565_MAGENTA 0xF81F
 #define RGB565_CYAN    0x07FF
 
-#define LCD_COLOR_TABLE_ENABLE 1
-
-#if LCD_COLOR_TABLE_ENABLE
-    // Color adjustment for color table
-    #define GAMMA_CURVE 1 // 0:Gamma 4.0, 1:Gamma 3.0, 2:Gamma 2.0, 3:Gamma 1.0
-    #define COLOR_VOL_MAX 55 // Maximum color volume (Max:63)
-    #define COLOR_VOL_OFFSET 0 // Color volume offset (0~63)
-#endif
-
 
 #define PIXEL_TX_CMD 0x2C // LCD Memory Write Command
 
