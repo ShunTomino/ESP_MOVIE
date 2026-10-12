@@ -51,7 +51,7 @@ extern "C" {
 esp_err_t init_backlight();
 
 // LCD Back LIght Volume Control : 0〜255
-esp_err_t backlight_volume(uint8_t volume);
+esp_err_t set_backlight_volume(uint8_t volume);
 
 // Set the window area
 // you don't need to send pixel data outside the specified range.

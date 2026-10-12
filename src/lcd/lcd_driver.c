@@ -44,14 +44,14 @@ esp_err_t init_backlight()
     if (err) return err;
 
     // Set LCD Back LIght Volume
-    backlight_volume(0);
+    set_backlight_volume(0);
 
     return ESP_OK;
 }
 
 
 // LCD Back Light Volume Control : 0〜255
-esp_err_t backlight_volume(uint8_t volume)
+esp_err_t set_backlight_volume(uint8_t volume)
 {
     esp_err_t err;
     err = ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_PWM_CHANNEL, volume);
