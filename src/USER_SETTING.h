@@ -49,16 +49,16 @@
 #define LCD_WIDTH  320
 #define LCD_HEIGHT 240
 
-#define LCD_XY_EXCHANGE 0 // 0:Normal, 1:Exchange
+#define LCD_XY_EXCHANGE 1 // 0:Normal, 1:Exchange
 #define LCD_X_INVERSE 1 // 0:Normal, 1:Inverse
-#define LCD_Y_INVERSE 1 // 0:Normal, 1:Inverse
+#define LCD_Y_INVERSE 0 // 0:Normal, 1:Inverse
 
-#define LCD_RGB_FORMAT 1 // 0:RGB, 1:BGR
-#define LCD_DATA_INVERSE 0 // 0:Normal, 1:Inverse
+#define LCD_RGB_FORMAT 0 // 0:RGB, 1:BGR
+#define LCD_DATA_INVERSE 1 // 0:Normal, 1:Inverse
 
 // Enable RGB565->RGB666 Color depth convertion in LCD
 // If your LCD supports color depth conversion table, you can set 1.
-#define LCD_COLOR_TABLE_ENABLE 1
+#define LCD_COLOR_TABLE_ENABLE 0
 
 #if LCD_COLOR_TABLE_ENABLE
     // Color adjustment for color table
