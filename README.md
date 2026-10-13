@@ -1,3 +1,5 @@
+![Arduino Library](https://www.ardu-badge.com/badge/ESP_MOVIE.svg)
+
 # ESP_MOVIE
 Movie (Motion JPEG and MP3) playback library for ESP32 series.
  
