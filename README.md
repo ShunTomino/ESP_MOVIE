@@ -1,7 +1,9 @@
-![Arduino Library](https://www.ardu-badge.com/badge/ESP_MOVIE.svg)
-
 # ESP_MOVIE
-Movie (Motion JPEG and MP3) playback library for ESP32 series.
+Movie (Motion JPEG and MP3) playback library for ESP32 series
+
+[![Arduino Library](https://www.ardu-badge.com/badge/ESP_MOVIE.svg)](https://www.ardu-badge.com/ESP_MOVIE)
+[![ESP Component Registry](https://components.espressif.com/components/shuntomino/esp_movie/badge.svg)](https://components.espressif.com/components/shuntomino/esp_movie)
+[![GitHub Release](https://img.shields.io/github/v/release/ShunTomino/ESP_MOVIE)](https://github.com/ShunTomino/ESP_MOVIE/releases)
  
 ## Features
 - Simultaneous playback of Motion JPEG video and MP3 audio from SD card files.
@@ -12,7 +14,6 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series.
 - Rectangle fill operation for a specified display area.
 - Display backlight brightness control.
 
-
 ## Platform
 - Arduino IDE (arduino-esp32)
 - ESP-IDF
@@ -20,16 +21,16 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series.
 ## Hardware Support
 ### MCU
 - Currently tested on ESP32-S3-WROOM-1 only. Support for other ESP32 series devices has not been verified yet.
- 
+
 ### Display
 - Supports Intel 8080 (8-bit parallel) interface with DMA transfer. SPI interface is not supported.
 - Supports RGB565/BGR565 color format.
 - Currently tested with the following display controllers. 
   - ILI9342
   - ST7789P3
-
+  
   Other MIPI DCS-compatible display controllers may also work, but have not been tested.
- 
+
 ### Audio
 - Supports I2S audio output.
 - Tested with the PCM5102 DAC. 
