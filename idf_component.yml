@@ -1,0 +1,17 @@
+description: "Movie playback library for ESP32 series"
+issues: "https://github.com/ShunTomino/ESP_MOVIE/issues"
+repository: "https://github.com/ShunTomino/ESP_MOVIE"
+license: "MIT"
+tags:
+- multimedia
+- MotionJPEG
+- JPEG
+- MP3
+- video
+- audio
+targets:
+- esp32s3
+url: "https://github.com/ShunTomino/ESP_MOVIE"
+version: "1.0.0"
+dependencies:
+  idf: ">=5.0"
