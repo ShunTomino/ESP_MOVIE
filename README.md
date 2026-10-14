@@ -34,7 +34,7 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series
 ### Audio
 - Supports I2S audio output.
 - Tested with the PCM5102 DAC. 
- 
+
 ### SD Card
 - Includes a built-in SPI-mode SD card driver.
 
