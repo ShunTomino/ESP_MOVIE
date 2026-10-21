@@ -504,6 +504,7 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
 	    search_mjpg_frame(path_mjpg); // search frame and make MP3LOAD file
 	}
 
+    // Set file path
     video.path_mjpg = path_mjpg;
     video.path_mjpgload = path_mjpgload;
 
@@ -536,10 +537,6 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
         err = JPG_ERR_OPEN_LOADFILE;
         goto END;
     }
-    
-    // Set file path
-    video.path_mjpg = path_mjpg;
-    video.path_mjpgload = path_mjpgload;
 
     // Get MicroSecPerFrame for MJPEG
     err = get_avi_info(&avi, file_mjpg);
