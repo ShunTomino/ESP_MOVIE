@@ -101,7 +101,7 @@
 #define PIN_I2S_BCLK   37 // to BCK
 #define PIN_I2S_DOUT   36 // to DIN
 #define PIN_I2S_LRC    35 // to LRCK(WS)
-#define PIN_AUDIO_MUTE 48 // High:unmute, Low:mute, if you don't use this pin, set -1.
+#define PIN_AUDIO_MUTE 48 // to XSMT, High:unmute, Low:mute, if you don't use this pin, set -1.
 
 #define I2S_PORT_NUM I2S_NUM_0
 
