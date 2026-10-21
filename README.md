@@ -36,7 +36,7 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series
 - Tested with the PCM5102 DAC. 
 
 ### SD Card
-- Includes a built-in SPI-mode SD card driver.
+- Supports SPI and SDMMC(1-Line) modes.
 
 
 ## Included Sample Files
