@@ -8,7 +8,7 @@
 
 
 /*---------- SD CARD Setting ----------*/
-#define SD_MODE 1 // 0: SPI, 1: SDMMC
+#define SD_MODE 0 // 0: SPI, 1: SDMMC
 
 #if (SD_MODE == 0) // SPI Mode
 
