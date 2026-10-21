@@ -2,7 +2,7 @@
 // Original source: https://github.com/ShunTomino/ESP_MOVIE.git
 #include "sdcard.h"
 
-
+#if (SD_MODE == 0)
 esp_err_t init_sd()
 {
     esp_err_t err;
@@ -43,6 +43,47 @@ esp_err_t init_sd()
 
     return ESP_OK;
 }
+#else
+esp_err_t init_sd()
+{
+    esp_err_t err;
+
+    // SD Card Setting
+    sdmmc_host_t host = SDMMC_HOST_DEFAULT();
+    host.max_freq_khz = SDMMC_FREQ_kHz;
+    host.slot = SDMMC_HOST_SLOT_1;
+
+    sdmmc_slot_config_t sd_cfg = SDMMC_SLOT_CONFIG_DEFAULT();
+    //sd_cfg.width = SDMMC_BUS_WIDTH;
+    sd_cfg.width = 1; // Currently, only 1-line mode is supported.
+
+    sd_cfg.clk = (gpio_num_t)PIN_SDMMC_CLK;
+    sd_cfg.cmd = (gpio_num_t)PIN_SDMMC_CMD;
+    sd_cfg.d0  = (gpio_num_t)PIN_SDMMC_D0;
+    //sd_cfg.d1  = (gpio_num_t)PIN_SDMMC_D1;
+    //sd_cfg.d2  = (gpio_num_t)PIN_SDMMC_D2;
+    //sd_cfg.d3  = (gpio_num_t)PIN_SDMMC_D3;
+    //sd_cfg.d4  = (gpio_num_t)PIN_SDMMC_D4;
+    //sd_cfg.d5  = (gpio_num_t)PIN_SDMMC_D5;
+    //sd_cfg.d6  = (gpio_num_t)PIN_SDMMC_D6;
+    //sd_cfg.d7  = (gpio_num_t)PIN_SDMMC_D7;
+    sd_cfg.cd  = (gpio_num_t)PIN_SDMMC_CD;
+    sd_cfg.wp  = (gpio_num_t)PIN_SDMMC_WP;
+
+    // FAT File System Setting
+    esp_vfs_fat_sdmmc_mount_config_t fs_cfg = {
+        .format_if_mount_failed = false,
+        .max_files = SD_MAX_FILES,
+    };
+
+    sdmmc_card_t *card;
+
+    err = esp_vfs_fat_sdmmc_mount(PATH_SD, &host, &sd_cfg, &fs_cfg, &card);
+    if(err) return err;
+
+    return ESP_OK;
+}
+#endif
 
 
 size_t file_size(const char *path)

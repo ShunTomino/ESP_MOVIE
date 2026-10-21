@@ -8,15 +8,29 @@
 
 
 /*---------- SD CARD Setting ----------*/
-// SPI Pin Assign
-#define PIN_SD_SPI_MOSI 21
-#define PIN_SD_SPI_MISO 13
-#define PIN_SD_SPI_SCK  14
-#define PIN_SD_SPI_CS   -1 // Chip Select Pin, if you don't use this pin, -1.
+#define SD_MODE 1 // 0: SPI, 1: SDMMC
 
-// SPI Setting
-#define SD_SPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
-#define SD_SPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
+#if (SD_MODE == 0) // SPI Mode
+
+    // Pin Assign
+    #define PIN_SD_SPI_MOSI 21
+    #define PIN_SD_SPI_MISO 13
+    #define PIN_SD_SPI_SCK  14
+    #define PIN_SD_SPI_CS   -1 // Chip Select Pin, if you don't use this pin, -1.
+
+    #define SD_SPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
+    #define SD_SPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
+#else // SDMMC Mode
+
+    // Pin Assign
+    #define PIN_SDMMC_CLK 41
+    #define PIN_SDMMC_CMD 42
+    #define PIN_SDMMC_D0 40
+    #define PIN_SDMMC_CD -1 // Card Detect Pin, if you don't use this pin, set -1.
+    #define PIN_SDMMC_WP -1 // Write Protect Pin, if you don't use this pin, set -1.
+
+    #define SDMMC_FREQ_kHz SDMMC_FREQ_DEFAULT
+#endif
 
 // File setting
 #define SD_MAX_FILES 3 // Min:3
@@ -87,7 +101,7 @@
 #define PIN_I2S_BCLK   37 // to BCK
 #define PIN_I2S_DOUT   36 // to DIN
 #define PIN_I2S_LRC    35 // to LRCK(WS)
-#define PIN_AUDIO_MUTE 48 // to XSMT, High:unmute, Low:mute, if you don't use this pin, set -1.
+#define PIN_AUDIO_MUTE 48 // High:unmute, Low:mute, if you don't use this pin, set -1.
 
 #define I2S_PORT_NUM I2S_NUM_0
 

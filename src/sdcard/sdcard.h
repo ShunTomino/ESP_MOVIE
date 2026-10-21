@@ -13,6 +13,7 @@
 #include <errno.h>
 
 #include <driver/gpio.h>
+#include <driver/sdmmc_host.h>
 #include <esp_vfs_fat.h>
 #include <ffconf.h>
 
