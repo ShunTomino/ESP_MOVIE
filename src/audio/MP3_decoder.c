@@ -181,7 +181,7 @@ void init_mp3_decoder(FuncEndMP3 func_end)
 		// Audio Mute Pin Setting
 		gpio_reset_pin((gpio_num_t)PIN_AUDIO_MUTE);
 		gpio_set_direction((gpio_num_t)PIN_AUDIO_MUTE, GPIO_MODE_OUTPUT);
-		SET_AUDIO_UNMUTE();
+		SET_AUDIO_MUTE();
 	#endif
 
 	// CallBack Registration
