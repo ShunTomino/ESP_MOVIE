@@ -485,7 +485,7 @@ void task_mjpg_decode(void *video_info)
 jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Core0or1, UBaseType_t taskPriority)
 {
     avi_info_t avi;
-    video_info_t video;
+    video_info_t video = {0};
     jpeg_dec_header_info_t jpg_info;
     FILE *file_mjpg = NULL;
     FILE *file_mjpgload = NULL;
@@ -493,21 +493,8 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
     uint32_t mjpg_frame_start = 0;
     jpg_err_t err;
 
-    mjpg_dec_standby = xSemaphoreCreateBinary();
-    mjpg_dec_start = xSemaphoreCreateBinary();
-    mjpg_dec_end = xSemaphoreCreateBinary();
-
-    // ----------MJPG Decode Initialization----------
     printf("\nMJPG: %s\n", path_mjpg);
-
-    // Set input/output buffer to io_callback
-    jpg_io.inbuf = jpg_buf;
-    jpg_io.inbuf_len = JPG_BUF_SIZE; // set input buffer length
-
-    #if JPG_BLOCK_DEC_ENABLE
-        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
-    #endif
-
+    
     // Make mjpgload file path
 	get_path_mjpgload(path_mjpgload, path_mjpg);
     //printf("\nMJPGLOAD: %s\n", path_mjpgload);
@@ -516,6 +503,21 @@ jpg_err_t set_mjpg(char *path_mjpg, int16_t x0, int16_t y0, const BaseType_t Cor
 	if(file_size(path_mjpgload) < 8) {
 	    search_mjpg_frame(path_mjpg); // search frame and make MP3LOAD file
 	}
+
+    video.path_mjpg = path_mjpg;
+    video.path_mjpgload = path_mjpgload;
+
+    mjpg_dec_standby = xSemaphoreCreateBinary();
+    mjpg_dec_start = xSemaphoreCreateBinary();
+    mjpg_dec_end = xSemaphoreCreateBinary();
+
+    // Set input/output buffer to io_callback
+    jpg_io.inbuf = jpg_buf;
+    jpg_io.inbuf_len = JPG_BUF_SIZE; // set input buffer length
+
+    #if JPG_BLOCK_DEC_ENABLE
+        jpg_io.out_size = IMGBUF_LEN; // Set output buffer length(Only for block decode mode)
+    #endif
     
     // Open MJPG file
     file_mjpg = fopen(path_mjpg, "rb");
