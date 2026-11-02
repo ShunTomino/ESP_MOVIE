@@ -51,22 +51,23 @@ esp_err_t init_sd()
     // SD Card Setting
     sdmmc_host_t host = SDMMC_HOST_DEFAULT();
     host.max_freq_khz = SDMMC_FREQ_kHz;
-    host.slot = SDMMC_HOST_SLOT_1;
-
+    host.slot = SDMMC_HOST;
+    
     sdmmc_slot_config_t sd_cfg = SDMMC_SLOT_CONFIG_DEFAULT();
-    //sd_cfg.width = SDMMC_BUS_WIDTH;
-    sd_cfg.width = 1; // Currently, only 1-line mode is supported.
+    sd_cfg.width = SDMMC_BUS_WIDTH;
 
+    #if SDMMC_INTERNAL_PULLUP
+        sd_cfg.flags |= SDMMC_SLOT_FLAG_INTERNAL_PULLUP;
+    #else
+        sd_cfg.flags &= ~SDMMC_SLOT_FLAG_INTERNAL_PULLUP;
+    #endif
+    
     sd_cfg.clk = (gpio_num_t)PIN_SDMMC_CLK;
     sd_cfg.cmd = (gpio_num_t)PIN_SDMMC_CMD;
     sd_cfg.d0  = (gpio_num_t)PIN_SDMMC_D0;
-    //sd_cfg.d1  = (gpio_num_t)PIN_SDMMC_D1;
-    //sd_cfg.d2  = (gpio_num_t)PIN_SDMMC_D2;
-    //sd_cfg.d3  = (gpio_num_t)PIN_SDMMC_D3;
-    //sd_cfg.d4  = (gpio_num_t)PIN_SDMMC_D4;
-    //sd_cfg.d5  = (gpio_num_t)PIN_SDMMC_D5;
-    //sd_cfg.d6  = (gpio_num_t)PIN_SDMMC_D6;
-    //sd_cfg.d7  = (gpio_num_t)PIN_SDMMC_D7;
+    sd_cfg.d1  = (gpio_num_t)PIN_SDMMC_D1;
+    sd_cfg.d2  = (gpio_num_t)PIN_SDMMC_D2;
+    sd_cfg.d3  = (gpio_num_t)PIN_SDMMC_D3;
     sd_cfg.cd  = (gpio_num_t)PIN_SDMMC_CD;
     sd_cfg.wp  = (gpio_num_t)PIN_SDMMC_WP;
 

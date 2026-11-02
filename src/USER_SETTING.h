@@ -8,7 +8,7 @@
 
 
 /*---------- SD CARD Setting ----------*/
-#define SD_MODE 0 // 0: SPI, 1: SDMMC
+#define SD_MODE 1 // 0: SPI, 1: SDMMC
 
 #if (SD_MODE == 0) // SPI Mode
 
@@ -21,15 +21,21 @@
     #define SD_SPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
     #define SD_SPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
 #else // SDMMC Mode
+    #define SDMMC_BUS_WIDTH 4 // 1: 1-line, 4: 4-line
 
     // Pin Assign
     #define PIN_SDMMC_CLK 41
     #define PIN_SDMMC_CMD 42
     #define PIN_SDMMC_D0 40
+    #define PIN_SDMMC_D1 39 // if you select the 1-line mode, set -1.
+    #define PIN_SDMMC_D2  1 // if you select the 1-line mode, set -1.
+    #define PIN_SDMMC_D3  2 // if you select the 1-line mode, set -1.
     #define PIN_SDMMC_CD -1 // Card Detect Pin, if you don't use this pin, set -1.
     #define PIN_SDMMC_WP -1 // Write Protect Pin, if you don't use this pin, set -1.
 
-    #define SDMMC_FREQ_kHz SDMMC_FREQ_DEFAULT
+    #define SDMMC_FREQ_kHz SDMMC_FREQ_HIGHSPEED
+    #define SDMMC_HOST SDMMC_HOST_SLOT_1
+    #define SDMMC_INTERNAL_PULLUP 1 // Enable Internal Pullup for CMD/D0/D1/D2/D3, Enable: 1, Disable: 0
 #endif
 
 // File setting
