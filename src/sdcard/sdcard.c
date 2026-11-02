@@ -9,9 +9,9 @@ esp_err_t init_sd()
 
     // SPI Bus Setting
     spi_bus_config_t spi_cfg = {
-        .mosi_io_num = PIN_SD_SPI_MOSI,
-        .miso_io_num = PIN_SD_SPI_MISO,
-        .sclk_io_num = PIN_SD_SPI_SCK,
+        .mosi_io_num = PIN_SDSPI_MOSI,
+        .miso_io_num = PIN_SDSPI_MISO,
+        .sclk_io_num = PIN_SDSPI_SCK,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
         .max_transfer_sz = 4092,
@@ -19,8 +19,8 @@ esp_err_t init_sd()
     
     // SD Card Setting
     sdspi_device_config_t sd_cfg = SDSPI_DEVICE_CONFIG_DEFAULT();
-    sd_cfg.host_id = (spi_host_device_t)SD_SPI_HOST; // SPI2_HOST:1, SPI3_HOST:2
-    sd_cfg.gpio_cs = (gpio_num_t)PIN_SD_SPI_CS;
+    sd_cfg.host_id = (spi_host_device_t)SDSPI_HOST; // SPI2_HOST:1, SPI3_HOST:2
+    sd_cfg.gpio_cs = (gpio_num_t)PIN_SDSPI_CS;
 
     // FAT File System Setting
     esp_vfs_fat_sdmmc_mount_config_t fs_cfg = {
@@ -29,17 +29,33 @@ esp_err_t init_sd()
     };
 
     sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-    host.max_freq_khz = SD_SPI_FREQ_kHz;
-    host.slot = (spi_host_device_t)SD_SPI_HOST;
+    host.max_freq_khz = SDSPI_FREQ_kHz;
+    host.slot = (spi_host_device_t)SDSPI_HOST;
     host.command_timeout_ms = 200;
 
     sdmmc_card_t *card;
 
-    err = spi_bus_initialize((spi_host_device_t)SD_SPI_HOST, &spi_cfg, SPI_DMA_CH_AUTO);
+    err = spi_bus_initialize((spi_host_device_t)SDSPI_HOST, &spi_cfg, SPI_DMA_CH_AUTO);
     if(err) return err;
 
     err = esp_vfs_fat_sdspi_mount(PATH_SD, &host, &sd_cfg, &fs_cfg, &card);
     if(err) return err;
+
+    #if SDSPI_INTERNAL_PULLUP
+        gpio_set_pull_mode(PIN_SDSPI_MOSI, GPIO_PULLUP_ONLY);
+        gpio_set_pull_mode(PIN_SDSPI_MISO, GPIO_PULLUP_ONLY);
+        gpio_set_pull_mode(PIN_SDSPI_SCK,  GPIO_PULLUP_ONLY);
+        #if (PIN_SDSPI_CS != -1)
+            gpio_set_pull_mode(PIN_SDSPI_CS, GPIO_PULLUP_ONLY);
+        #endif
+    #else
+        gpio_set_pull_mode(PIN_SDSPI_MOSI, GPIO_FLOATING);
+        gpio_set_pull_mode(PIN_SDSPI_MISO, GPIO_FLOATING);
+        gpio_set_pull_mode(PIN_SDSPI_SCK,  GPIO_FLOATING);
+        #if (PIN_SDSPI_CS != -1)
+            gpio_set_pull_mode(PIN_SDSPI_CS, GPIO_FLOATING);
+        #endif
+    #endif
 
     return ESP_OK;
 }
@@ -52,6 +68,8 @@ esp_err_t init_sd()
     sdmmc_host_t host = SDMMC_HOST_DEFAULT();
     host.max_freq_khz = SDMMC_FREQ_kHz;
     host.slot = SDMMC_HOST;
+    //host.command_timeout_ms = 10;
+    //host.input_delay_phase = SDMMC_DELAY_PHASE_0;
     
     sdmmc_slot_config_t sd_cfg = SDMMC_SLOT_CONFIG_DEFAULT();
     sd_cfg.width = SDMMC_BUS_WIDTH;

@@ -4,22 +4,24 @@
 #include <driver/gpio.h>
 #include <driver/ledc.h>
 #include <driver/i2s_std.h>
+#include <driver/sdmmc_host.h>
 #include <esp_vfs_fat.h>
 
 
 /*---------- SD CARD Setting ----------*/
-#define SD_MODE 1 // 0: SPI, 1: SDMMC
+#define SD_MODE 0 // 0: SPI, 1: SDMMC
 
 #if (SD_MODE == 0) // SPI Mode
 
     // Pin Assign
-    #define PIN_SD_SPI_MOSI 21
-    #define PIN_SD_SPI_MISO 13
-    #define PIN_SD_SPI_SCK  14
-    #define PIN_SD_SPI_CS   -1 // Chip Select Pin, if you don't use this pin, -1.
+    #define PIN_SDSPI_MOSI 21
+    #define PIN_SDSPI_MISO 13
+    #define PIN_SDSPI_SCK  14
+    #define PIN_SDSPI_CS   -1 // Chip Select Pin, if you don't use this pin, set -1.
 
-    #define SD_SPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
-    #define SD_SPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
+    #define SDSPI_FREQ_kHz SDMMC_FREQ_DEFAULT // Max:20000kHz
+    #define SDSPI_HOST 1 // SPI2_HOST: 1, SPI3_HOST: 2
+    #define SDSPI_INTERNAL_PULLUP 1 // Enable Internal Pullup for MOSI/MISO/SCK/CS, Enable: 1, Disable: 0
 #else // SDMMC Mode
     #define SDMMC_BUS_WIDTH 4 // 1: 1-line, 4: 4-line
 
