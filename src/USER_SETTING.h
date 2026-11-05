@@ -1,5 +1,5 @@
 // User Setting for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 #include <driver/gpio.h>
 #include <driver/ledc.h>

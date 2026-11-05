@@ -1,5 +1,5 @@
 // LCD Driver for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #include "lcd_driver.h"
 
 

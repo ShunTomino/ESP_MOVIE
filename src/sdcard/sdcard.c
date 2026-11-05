@@ -1,5 +1,5 @@
 // SD Card(SPI) Setting for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #include "sdcard.h"
 
 #if (SD_MODE == 0)

@@ -1,14 +1,9 @@
 // ESP_MOVIE - Motion JPEG and MP3 player library for ESP32 Series
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 
-#ifdef ARDUINO // Arduino IDE
-    #include "video/JPG_decoder.h"
-    #include "audio/MP3_decoder.h"
-#else // ESP_PLATFORM(ESP-IDF)
-    #include "JPG_decoder.h"
-    #include "MP3_decoder.h"
-#endif
+#include "video/JPG_decoder.h"
+#include "audio/MP3_decoder.h"
 
 #ifdef __cplusplus
 extern "C" {

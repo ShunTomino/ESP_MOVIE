@@ -1,5 +1,5 @@
 // Intel 8080 bus (8bit parallel bus) for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 
 #include <stdio.h>

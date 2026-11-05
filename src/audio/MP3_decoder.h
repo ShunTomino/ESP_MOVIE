@@ -1,5 +1,5 @@
 // MP3 Decoder for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 
 #include <stdio.h>
@@ -16,13 +16,8 @@
 #include <driver/gpio.h>
 #include <soc/gpio_struct.h>
 
-#ifdef ARDUINO // Arduino IDE
-	#include "sdcard/sdcard.h"
-	#include "esp-libhelix-mp3/mp3dec.h"
-#else // ESP_PLATFORM(ESP-IDF)
-	#include "sdcard.h"
-	#include "mp3dec.h"
-#endif
+#include "sdcard/sdcard.h"
+#include "esp-libhelix-mp3/mp3dec.h"
 
 #include "USER_SETTING.h"
 

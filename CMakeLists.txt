@@ -10,14 +10,6 @@ idf_component_register(
         "src/esp-libhelix-mp3"
     INCLUDE_DIRS
         "src"
-        "src/video"
-        "src/audio"
-        "src/sdcard"
-        "src/bus"
-        "src/lcd"
-        "src/font/font8x16"
-        "src/esp-libhelix-mp3"
-        "src/esp_new_jpeg/src"
     REQUIRES 
         freertos
         esp_driver_gpio

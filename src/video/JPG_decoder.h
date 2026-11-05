@@ -1,5 +1,5 @@
 // JPG/MJPG Decoder for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 
 #include <stdio.h>
@@ -13,15 +13,9 @@
 
 #include <esp_timer.h>
 
-#ifdef ARDUINO // Arduino IDE
-    #include "sdcard/sdcard.h"
-    #include "lcd/lcd_driver.h"
-	#include "esp_new_jpeg/src/esp_jpeg_dec.h"
-#else // ESP_PLATFORM(ESP-IDF)
-    #include "sdcard.h"
-    #include "lcd_driver.h"
-	#include "esp_jpeg_dec.h"
-#endif
+#include "sdcard/sdcard.h"
+#include "lcd/lcd_driver.h"
+#include "esp_new_jpeg/src/esp_jpeg_dec.h"
 
 #ifdef __cplusplus
 extern "C" {

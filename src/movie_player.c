@@ -1,5 +1,5 @@
 // ESP_MOVIE - Motion JPEG and MP3 player library for ESP32 Series
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #include "movie_player.h"
 
 

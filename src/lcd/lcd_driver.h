@@ -1,5 +1,5 @@
 // LCD Driver for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #pragma once
 
 #include <stdio.h>
@@ -11,13 +11,8 @@
 #include <driver/gpio.h>
 #include <driver/ledc.h>
 
-#ifdef ARDUINO // Arduino IDE
-    #include "bus/bus_i80.h"
-    #include "font/font8x16/font_8x16.h"
-#else // ESP_PLATFORM(ESP-IDF)
-    #include "bus_i80.h"
-    #include "font_8x16.h"
-#endif
+#include "bus/bus_i80.h"
+#include "font/font8x16/font_8x16.h"
 
 #ifdef __cplusplus
 extern "C" {

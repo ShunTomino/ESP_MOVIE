@@ -1,5 +1,5 @@
 // MP3 Decoder for ESP_MOVIE library
-// Original source: https://github.com/ShunTomino/ESP_MOVIE.git
+// Original source: https://github.com/ShunTomino/ESP_MOVIE
 #include "MP3_decoder.h"
 
 
