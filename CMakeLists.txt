@@ -17,6 +17,8 @@ idf_component_register(
         esp_driver_ledc
         esp_timer
         esp_lcd
+        esp_driver_sdmmc
+        esp_driver_sdspi
         fatfs
 )
 
