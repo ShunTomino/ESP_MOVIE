@@ -53,6 +53,7 @@ ESP_MOVIE uses the following libraries.
 - [font8x16](https://github.com/hubenchang0515/font8x16.git) (hubenchang0515): MIT License
 
 ##
+<img width="1320" height="600" alt="699647037-dd542e18-7898-47ab-a7a0-270f4ebc2dca" src="https://github.com/user-attachments/assets/2665f83c-a0d8-47de-8efb-44ea65fa965c" />
 <img width="786" height="800" alt="662273982-568e9c63-7523-4765-9915-dac9b773f11e" src="https://github.com/user-attachments/assets/8bd22a78-9cd4-4ce4-82de-2fce5628feb0" />
 <img width="1728" height="860" alt="662274187-f6c32763-96d2-4800-821c-29fa1cdfe6c9" src="https://github.com/user-attachments/assets/560dd7c4-e7a4-4b15-bf7a-436755e216a4" />
 
