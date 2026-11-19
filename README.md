@@ -35,7 +35,7 @@ Movie (Motion JPEG / MP3) playback library for ESP32 series
   Other MIPI DCS-compatible display controllers may also work, but have not been tested.
 
 ### Audio
-- Supports I2S audio DAC output.
+- Supports I2S output for audio DAC.
 - Tested with the PCM5102a. 
 
 ### SD Card
