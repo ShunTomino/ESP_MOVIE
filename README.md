@@ -1,5 +1,5 @@
 # ESP_MOVIE
-Easy-to-use Motion JPEG and MP3 playback library for ESP32 series
+Movie (Motion JPEG / MP3) playback library for ESP32 series
 
 [![Arduino Library](https://www.ardu-badge.com/badge/ESP_MOVIE.svg)](https://www.ardu-badge.com/ESP_MOVIE)
 [![ESP Component Registry](https://components.espressif.com/components/shuntomino/esp_movie/badge.svg)](https://components.espressif.com/components/shuntomino/esp_movie)
@@ -15,6 +15,7 @@ Easy-to-use Motion JPEG and MP3 playback library for ESP32 series
 - Rectangle fill operation for a specified display area.
 - Optional PSRAM support for frame editing.
 - Display backlight brightness control.
+- Easy to use.
 
 ## Platform
 - Arduino IDE (arduino-esp32)
