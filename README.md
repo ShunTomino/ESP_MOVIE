@@ -15,6 +15,7 @@ Movie (Motion JPEG / MP3) playback library for ESP32 series
 - Rectangle fill operation for a specified display area.
 - Optional PSRAM support for frame editing.
 - Display backlight brightness control.
+- Audio volume control.
 - Easy to use.
 
 ## Platform
