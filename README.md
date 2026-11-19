@@ -30,13 +30,13 @@ Movie (Motion JPEG / MP3) playback library for ESP32 series
 - Supports RGB565/BGR565 color formats.
 - Currently tested with the following display controllers. 
   - ILI9342
-  - ST7789P3
+  - ST7789
   
   Other MIPI DCS-compatible display controllers may also work, but have not been tested.
 
 ### Audio
-- Supports I2S audio output.
-- Tested with the PCM5102 DAC. 
+- Supports I2S audio DAC output.
+- Tested with the PCM5102a. 
 
 ### SD Card
 - Supports SPI and SDMMC(1-Line and 4-Line) modes.
