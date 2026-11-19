@@ -1,5 +1,5 @@
 # ESP_MOVIE
-Movie (Motion JPEG and MP3) playback library for ESP32 series
+Easy-to-use Motion JPEG and MP3 playback library for ESP32 series
 
 [![Arduino Library](https://www.ardu-badge.com/badge/ESP_MOVIE.svg)](https://www.ardu-badge.com/ESP_MOVIE)
 [![ESP Component Registry](https://components.espressif.com/components/shuntomino/esp_movie/badge.svg)](https://components.espressif.com/components/shuntomino/esp_movie)
@@ -7,11 +7,13 @@ Movie (Motion JPEG and MP3) playback library for ESP32 series
  
 ## Features
 - Simultaneous playback of Motion JPEG video and MP3 audio from SD card files.
+- Playback control (Play/Pause/Resume/Stop).
 - Motion JPEG-only playback.
 - MP3-only playback.
 - JPEG image display.
 - Text rendering.
 - Rectangle fill operation for a specified display area.
+- Optional PSRAM support for frame editing.
 - Display backlight brightness control.
 
 ## Platform
